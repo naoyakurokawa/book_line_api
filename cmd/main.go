@@ -26,7 +26,7 @@ func run(ctx context.Context) error {
 	}
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
 	if err != nil {
-		log.Fatalf("failed to listen port %s: %v", cfg.Port, err)
+		log.Fatalf("failed to listen port %d: %v", cfg.Port, err)
 	}
 	url := fmt.Sprintf("http://%s", l.Addr().String())
 	log.Printf("failed to terminate server: %v", url)
