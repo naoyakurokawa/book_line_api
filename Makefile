@@ -21,6 +21,9 @@ logs: ## Tail docker compose logs
 ps: ## Check container status
 	docker compose ps
 
+run: ## Run application
+	go build -o main && ./main
+
 test: ## Execute tests
 	go test -race -shuffle=on ./...
 
