@@ -10,3 +10,18 @@ version: "3.9"
 #       - .:/app
 #     ports:
 #       - "18000:8080"
+services:
+  book_line_db:
+    image: mysql:8.0.29
+    platform: linux/amd64
+    container_name: book_line_db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: book_line
+      MYSQL_PASSWORD: book_line
+      MYSQL_DATABASE: book_line
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    ports:
+      - "33306:3306"

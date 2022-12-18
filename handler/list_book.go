@@ -13,7 +13,7 @@ type ListBook struct {
 type book struct {
 	ID    entity.BookID `json:"id"`
 	Title string        `json:"title"`
-	Isbn  entity.Isbn   `json:"status"`
+	Isbn  entity.Isbn   `json:"isbn"`
 }
 
 func (lt *ListBook) ServeHTTP(w http.ResponseWriter, r *http.Request) {

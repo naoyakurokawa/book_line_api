@@ -14,9 +14,9 @@ type ListBook struct {
 }
 
 func (l *ListBook) ListBooks(ctx context.Context) (entity.Books, error) {
-	ts, err := l.Repo.ListBooks(ctx, l.DB)
+	bs, err := l.Repo.ListBooks(ctx, l.DB)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list: %w", err)
 	}
-	return ts, nil
+	return bs, nil
 }
