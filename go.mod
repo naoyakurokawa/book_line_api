@@ -16,6 +16,7 @@ require (
 require (
 	github.com/caarlos0/env/v6 v6.10.1 // indirect
 	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gorilla/mux v1.8.0

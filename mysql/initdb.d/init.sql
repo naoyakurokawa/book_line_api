@@ -13,6 +13,17 @@ CREATE TABLE `books`
     PRIMARY KEY (`id`)
 ) Engine=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ブック';
 
+DROP TABLE IF EXISTS users;
+CREATE TABLE `users`
+(
+    `id`       BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ユーザーの識別子',
+    `name`     varchar(20) NOT NULL COMMENT 'ユーザー名',
+    `password`    VARCHAR(128) NOT NULL COMMENT 'パスワードハッシュ',
+    `created`  DATETIME(6) NOT NULL COMMENT 'レコード作成日時',
+    `modified` DATETIME(6) NOT NULL COMMENT 'レコード修正日時',
+    PRIMARY KEY (`id`)
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ユーザー';
+
 INSERT INTO books (
   id,
   title,
