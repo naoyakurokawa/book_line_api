@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
+	"github.com/naoyakurokawa/book_line_api/auth"
 	"github.com/naoyakurokawa/book_line_api/clock"
 	"github.com/naoyakurokawa/book_line_api/config"
 	"github.com/naoyakurokawa/book_line_api/handler"
@@ -23,6 +24,14 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		return nil, cleanup, err
 	}
 	rep := store.Repository{Clocker: clocker}
+	rcli, err := store.NewKVS(ctx, cfg)
+	if err != nil {
+		return nil, cleanup, err
+	}
+	jwter, err := auth.NewJWTer(rcli, clocker)
+	if err != nil {
+		return nil, cleanup, err
+	}
 	lt := &handler.ListBook{
 		Service: &service.ListBook{DB: db, Repo: &rep},
 	}
@@ -33,6 +42,16 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		Validator: v,
 	}
 	r.HandleFunc("/register", ru.ServeHTTP).Methods(http.MethodPost)
+
+	l := &handler.Login{
+		Service: &service.Login{
+			DB:             db,
+			Repo:           &rep,
+			TokenGenerator: jwter,
+		},
+		Validator: v,
+	}
+	r.HandleFunc("/login", l.ServeHTTP).Methods(http.MethodPost)
 
 	return r, cleanup, nil
 }
