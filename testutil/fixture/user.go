@@ -13,6 +13,7 @@ func User(u *entity.User) *entity.User {
 		ID:       entity.UserID(rand.Int()),
 		Name:     "kurokawa" + strconv.Itoa(rand.Int())[:5],
 		Password: "password",
+		Role:     "admin",
 		Created:  time.Now(),
 		Modified: time.Now(),
 	}
@@ -27,6 +28,9 @@ func User(u *entity.User) *entity.User {
 	}
 	if u.Password != "" {
 		result.Password = u.Password
+	}
+	if u.Role != "" {
+		result.Role = u.Role
 	}
 	if !u.Created.IsZero() {
 		result.Created = u.Created

@@ -12,5 +12,5 @@ type ListBooksService interface {
 }
 
 type RegisterUserService interface {
-	RegisterUser(ctx context.Context, name, password string) (*entity.User, error)
+	RegisterUser(ctx context.Context, name, password, role string) (*entity.User, error)
 }

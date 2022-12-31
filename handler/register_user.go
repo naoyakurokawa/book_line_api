@@ -18,6 +18,7 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var b struct {
 		Name     string `json:"name" validate:"required"`
 		Password string `json:"password" validate:"required"`
+		Role     string `json:"role" validate:"required"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
@@ -34,7 +35,7 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := ru.Service.RegisterUser(ctx, b.Name, b.Password)
+	u, err := ru.Service.RegisterUser(ctx, b.Name, b.Password, b.Role)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),
