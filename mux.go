@@ -16,7 +16,6 @@ import (
 
 func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), error) {
 	r := mux.NewRouter()
-
 	clocker := clock.RealClocker{}
 	v := validator.New()
 	db, cleanup, err := store.New(ctx, cfg)
@@ -24,6 +23,15 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		return nil, cleanup, err
 	}
 	rep := store.Repository{Clocker: clocker}
+
+	// ユーザー登録
+	ru := &handler.RegisterUser{
+		Service:   &service.RegisterUser{DB: db, Repo: &rep},
+		Validator: v,
+	}
+	r.HandleFunc("/register", ru.ServeHTTP).Methods(http.MethodPost)
+
+	// ログイン
 	rcli, err := store.NewKVS(ctx, cfg)
 	if err != nil {
 		return nil, cleanup, err
@@ -32,17 +40,6 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	if err != nil {
 		return nil, cleanup, err
 	}
-	lt := &handler.ListBook{
-		Service: &service.ListBook{DB: db, Repo: &rep},
-	}
-	r.HandleFunc("/books", lt.ServeHTTP).Methods(http.MethodGet)
-
-	ru := &handler.RegisterUser{
-		Service:   &service.RegisterUser{DB: db, Repo: &rep},
-		Validator: v,
-	}
-	r.HandleFunc("/register", ru.ServeHTTP).Methods(http.MethodPost)
-
 	l := &handler.Login{
 		Service: &service.Login{
 			DB:             db,
@@ -52,6 +49,17 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		Validator: v,
 	}
 	r.HandleFunc("/login", l.ServeHTTP).Methods(http.MethodPost)
+
+	// 認証が必要なメソッドを分けるため、Subrouterを実行
+	auth := r.PathPrefix("").Subrouter()
+	// 本一覧取得
+	lt := &handler.ListBook{
+		Service: &service.ListBook{DB: db, Repo: &rep},
+	}
+	auth.HandleFunc("/books", lt.ServeHTTP).Methods(http.MethodGet)
+
+	// 認証ミドルウェア使用
+	auth.Use(handler.AuthMiddleware(jwter))
 
 	return r, cleanup, nil
 }
