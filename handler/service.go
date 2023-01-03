@@ -6,17 +6,17 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-//go:generate go run github.com/matryer/moq -out moq_test.go . ListBooksService RegisterUserService LoginService
-type ListBooksService interface {
-	ListBooks(ctx context.Context) (entity.Books, error)
+//go:generate go run github.com/matryer/moq -out moq_test.go . FetchBooksService RegisterUserService LoginService
+type FetchBooksService interface {
+	FetchBooks(ctx context.Context) (entity.Books, error)
 }
 
-type ListBookMemosService interface {
-	ListBookMemos(ctx context.Context, book_id string) (entity.BookMemos, error)
+type FetchBookMemosService interface {
+	FetchBookMemos(ctx context.Context, book_id string) (entity.BookMemos, error)
 }
 
-type RegisterUserService interface {
-	RegisterUser(ctx context.Context, name, password, role string) (*entity.User, error)
+type CreateUserService interface {
+	CreateUser(ctx context.Context, name, password, role string) (*entity.User, error)
 }
 
 type LoginService interface {

@@ -8,12 +8,12 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-type RegisterUser struct {
-	Service   RegisterUserService
+type CreateUserHandler struct {
+	Service   CreateUserService
 	Validator *validator.Validate
 }
 
-func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (cu *CreateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	var b struct {
 		Name     string `json:"name" validate:"required"`
@@ -28,14 +28,14 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ru.Validator.Struct(b); err != nil {
+	if err := cu.Validator.Struct(b); err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
 
-	u, err := ru.Service.RegisterUser(ctx, b.Name, b.Password, b.Role)
+	u, err := cu.Service.CreateUser(ctx, b.Name, b.Password, b.Role)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),

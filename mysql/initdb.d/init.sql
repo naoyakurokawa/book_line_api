@@ -24,16 +24,16 @@ INSERT INTO users (
 ) VALUES (
   1, 
   "admin", 
-  "admin3294",
+  "$2a$10$8UMx9XoCCYEkdGoaFySvV.fN6HUNofYzPMJQCgh6j6mePNFVXhFsm",
   "admin",
   "2022-12-22 00:00:00.000000",
   "2022-12-22 00:00:00.000000"
 ),
 (
   2, 
-  "normal", 
-  "normal9834",
-  "normal",
+  "user", 
+  "$2a$10$dx8NNMcM0VBaeb2qk05da.7Dx0Cu3rUpaNJbinbYP75D4SxC0X2uu",
+  "user",
   "2022-12-22 00:00:00.000000",
   "2022-12-22 00:00:00.000000"
 );

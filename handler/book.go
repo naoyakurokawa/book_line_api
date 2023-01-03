@@ -6,8 +6,8 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-type ListBook struct {
-	Service ListBooksService
+type FetchBooksHandler struct {
+	Service FetchBooksService
 }
 
 type book struct {
@@ -15,9 +15,9 @@ type book struct {
 	Isbn entity.Isbn   `json:"isbn"`
 }
 
-func (lt *ListBook) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (fb *FetchBooksHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	books, err := lt.Service.ListBooks(ctx)
+	books, err := fb.Service.FetchBooks(ctx)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),

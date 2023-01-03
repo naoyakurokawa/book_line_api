@@ -8,8 +8,8 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-type ListBookMemo struct {
-	Service   ListBookMemosService
+type FetchBookMemosHandler struct {
+	Service   FetchBookMemosService
 	Validator *validator.Validate
 }
 
@@ -20,7 +20,7 @@ type bookMemo struct {
 	Detail string            `json:"detail"`
 }
 
-func (lbm *ListBookMemo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (fbm *FetchBookMemosHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	var body struct {
 		BookID string `json:"book_id" validate:"required"`
@@ -31,14 +31,14 @@ func (lbm *ListBookMemo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}, http.StatusInternalServerError)
 		return
 	}
-	err := lbm.Validator.Struct(body)
+	err := fbm.Validator.Struct(body)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
-	book_memos, err := lbm.Service.ListBookMemos(ctx, body.BookID)
+	book_memos, err := fbm.Service.FetchBookMemos(ctx, body.BookID)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),

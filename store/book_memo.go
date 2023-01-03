@@ -6,7 +6,7 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-func (r *Repository) ListBookMemos(
+func (r *Repository) FetchBookMemos(
 	ctx context.Context, db Queryer, bookID string,
 ) (entity.BookMemos, error) {
 	book_memos := entity.BookMemos{}

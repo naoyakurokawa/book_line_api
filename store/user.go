@@ -9,7 +9,7 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-func (r *Repository) RegisterUser(ctx context.Context, db Execer, u *entity.User) error {
+func (r *Repository) CreateUser(ctx context.Context, db Execer, u *entity.User) error {
 	u.Created = r.Clocker.Now()
 	u.Modified = r.Clocker.Now()
 	sql := `INSERT INTO users (
@@ -31,7 +31,7 @@ func (r *Repository) RegisterUser(ctx context.Context, db Execer, u *entity.User
 	return nil
 }
 
-func (r *Repository) GetUser(
+func (r *Repository) FetchUserByID(
 	ctx context.Context, db Queryer, name string,
 ) (*entity.User, error) {
 	u := &entity.User{}
