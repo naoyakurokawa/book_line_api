@@ -19,3 +19,17 @@ func (r *Repository) FetchBookMemos(
 	}
 	return book_memos, nil
 }
+
+func (r *Repository) CreateBookMemo(
+	ctx context.Context, db Execer, bm *entity.BookMemo,
+) error {
+	bm.Created = r.Clocker.Now()
+	bm.Modified = r.Clocker.Now()
+	sql := `INSERT INTO book_memos(book_id, page, detail, created, modified)
+		VALUES (?, ?, ?, ?, ?) `
+	_, err := db.ExecContext(ctx, sql, bm.BookID, bm.Page, bm.Detail, bm.Created, bm.Created)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -8,6 +8,23 @@ import (
 	"github.com/naoyakurokawa/book_line_api/store"
 )
 
+type CreateBookMemoService struct {
+	DB   store.Execer
+	Repo BookMemoCreator
+}
+
+func (cbm *CreateBookMemoService) CreateBookMemo(ctx context.Context, book_ID entity.BookID, page int64, detail string) error {
+	bm := &entity.BookMemo{
+		BookID: book_ID,
+		Page:   page,
+		Detail: detail,
+	}
+	if err := cbm.Repo.CreateBookMemo(ctx, cbm.DB, bm); err != nil {
+		return fmt.Errorf("failed to create book memo: %w", err)
+	}
+	return nil
+}
+
 type FetchBookMemosService struct {
 	DB   store.Queryer
 	Repo BookMemoFetcher
