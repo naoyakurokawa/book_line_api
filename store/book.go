@@ -11,7 +11,7 @@ func (r *Repository) ListBooks(
 ) (entity.Books, error) {
 	books := entity.Books{}
 	sql := `SELECT 
-				id, title, isbn,
+				id, isbn,
 				created, modified 
 			FROM books;`
 	if err := db.SelectContext(ctx, &books, sql); err != nil {

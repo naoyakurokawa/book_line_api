@@ -7,9 +7,13 @@ import (
 	"github.com/naoyakurokawa/book_line_api/store"
 )
 
-//go:generate go run github.com/matryer/moq -out moq_test.go . BookLister UserRegister
+//go:generate go run github.com/matryer/moq -out moq_test.go . BookLister BookMemoLister UserRegister
 type BookLister interface {
 	ListBooks(ctx context.Context, db store.Queryer) (entity.Books, error)
+}
+
+type BookMemoLister interface {
+	ListBookMemos(ctx context.Context, db store.Queryer, bookID string) (entity.BookMemos, error)
 }
 
 type UserRegister interface {

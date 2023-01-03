@@ -11,6 +11,10 @@ type ListBooksService interface {
 	ListBooks(ctx context.Context) (entity.Books, error)
 }
 
+type ListBookMemosService interface {
+	ListBookMemos(ctx context.Context, book_id string) (entity.BookMemos, error)
+}
+
 type RegisterUserService interface {
 	RegisterUser(ctx context.Context, name, password, role string) (*entity.User, error)
 }
