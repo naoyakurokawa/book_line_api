@@ -6,7 +6,7 @@ import (
 	"github.com/naoyakurokawa/book_line_api/entity"
 )
 
-func (r *Repository) ListBooks(
+func (r *Repository) FetchBooks(
 	ctx context.Context, db Queryer,
 ) (entity.Books, error) {
 	books := entity.Books{}

@@ -8,13 +8,13 @@ import (
 	"github.com/naoyakurokawa/book_line_api/store"
 )
 
-type ListBook struct {
+type FetchBooksService struct {
 	DB   store.Queryer
-	Repo BookLister
+	Repo BookFetcher
 }
 
-func (l *ListBook) ListBooks(ctx context.Context) (entity.Books, error) {
-	bs, err := l.Repo.ListBooks(ctx, l.DB)
+func (f *FetchBooksService) FetchBooks(ctx context.Context) (entity.Books, error) {
+	bs, err := f.Repo.FetchBooks(ctx, f.DB)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list: %w", err)
 	}

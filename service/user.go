@@ -9,12 +9,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type RegisterUser struct {
+type CreateUserService struct {
 	DB   store.Execer
-	Repo UserRegister
+	Repo UserCreator
 }
 
-func (ru *RegisterUser) RegisterUser(ctx context.Context, name, password, role string) (*entity.User, error) {
+func (cu *CreateUserService) CreateUser(ctx context.Context, name, password, role string) (*entity.User, error) {
 	pw, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, fmt.Errorf("cannot hash password: %w", err)
@@ -25,7 +25,7 @@ func (ru *RegisterUser) RegisterUser(ctx context.Context, name, password, role s
 		Role:     role,
 	}
 
-	if err := ru.Repo.RegisterUser(ctx, ru.DB, u); err != nil {
+	if err := cu.Repo.CreateUser(ctx, cu.DB, u); err != nil {
 		return nil, fmt.Errorf("failed to register: %w", err)
 	}
 

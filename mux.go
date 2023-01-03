@@ -25,8 +25,8 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	rep := store.Repository{Clocker: clocker}
 
 	// ユーザー登録
-	ru := &handler.RegisterUser{
-		Service:   &service.RegisterUser{DB: db, Repo: &rep},
+	ru := &handler.CreateUserHandler{
+		Service:   &service.CreateUserService{DB: db, Repo: &rep},
 		Validator: v,
 	}
 	r.HandleFunc("/register", ru.ServeHTTP).Methods(http.MethodPost)
@@ -53,13 +53,13 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	// 認証が必要なメソッドを分けるため、Subrouterを実行
 	auth := r.PathPrefix("").Subrouter()
 	// 本一覧取得
-	lt := &handler.ListBook{
-		Service: &service.ListBook{DB: db, Repo: &rep},
+	lt := &handler.FetchBooksHandler{
+		Service: &service.FetchBooksService{DB: db, Repo: &rep},
 	}
 	auth.HandleFunc("/books", lt.ServeHTTP).Methods(http.MethodGet)
 
-	lbm := &handler.ListBookMemo{
-		Service:   &service.ListBookMemos{DB: db, Repo: &rep},
+	lbm := &handler.FetchBookMemosHandler{
+		Service:   &service.FetchBookMemosService{DB: db, Repo: &rep},
 		Validator: v,
 	}
 	auth.HandleFunc("/books/memos", lbm.ServeHTTP).Methods(http.MethodGet)
