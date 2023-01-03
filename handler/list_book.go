@@ -11,9 +11,8 @@ type ListBook struct {
 }
 
 type book struct {
-	ID    entity.BookID `json:"id"`
-	Title string        `json:"title"`
-	Isbn  entity.Isbn   `json:"isbn"`
+	ID   entity.BookID `json:"id"`
+	Isbn entity.Isbn   `json:"isbn"`
 }
 
 func (lt *ListBook) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -28,9 +27,8 @@ func (lt *ListBook) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rsp := []book{}
 	for _, b := range books {
 		rsp = append(rsp, book{
-			ID:    b.ID,
-			Title: b.Title,
-			Isbn:  b.Isbn,
+			ID:   b.ID,
+			Isbn: b.Isbn,
 		})
 	}
 	RespondJSON(ctx, w, rsp, http.StatusOK)

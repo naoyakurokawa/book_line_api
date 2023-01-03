@@ -58,8 +58,14 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	}
 	auth.HandleFunc("/books", lt.ServeHTTP).Methods(http.MethodGet)
 
+	lbm := &handler.ListBookMemo{
+		Service:   &service.ListBookMemos{DB: db, Repo: &rep},
+		Validator: v,
+	}
+	auth.HandleFunc("/books/memos", lbm.ServeHTTP).Methods(http.MethodGet)
+
 	// 認証ミドルウェア使用
-	auth.Use(handler.AuthMiddleware(jwter))
+	// auth.Use(handler.AuthMiddleware(jwter))
 
 	return r, cleanup, nil
 }
