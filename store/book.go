@@ -19,3 +19,17 @@ func (r *Repository) FetchBooks(
 	}
 	return books, nil
 }
+
+func (r *Repository) CreateBook(
+	ctx context.Context, db Execer, b *entity.Book,
+) error {
+	b.Created = r.Clocker.Now()
+	b.Modified = r.Clocker.Now()
+	sql := `INSERT INTO books (isbn, created, modified) 
+		VALUES (?, ?, ?);`
+	_, err := db.ExecContext(ctx, sql, b.Isbn, b.Created, b.Created)
+	if err != nil {
+		return err
+	}
+	return nil
+}

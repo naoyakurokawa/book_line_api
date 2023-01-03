@@ -52,17 +52,31 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 
 	// 認証が必要なメソッドを分けるため、Subrouterを実行
 	auth := r.PathPrefix("").Subrouter()
+	// 本登録
+	cb := &handler.CreateBooksHandler{
+		Service:   &service.CreateBookService{DB: db, Repo: &rep},
+		Validator: v,
+	}
+	auth.HandleFunc("/create/book", cb.CreateBook).Methods(http.MethodPost)
 	// 本一覧取得
-	lt := &handler.FetchBooksHandler{
+	fb := &handler.FetchBooksHandler{
 		Service: &service.FetchBooksService{DB: db, Repo: &rep},
 	}
-	auth.HandleFunc("/books", lt.ServeHTTP).Methods(http.MethodGet)
+	auth.HandleFunc("/books", fb.FetchBooks).Methods(http.MethodGet)
 
-	lbm := &handler.FetchBookMemosHandler{
+	// 本のメモ登録
+	cbm := &handler.CreateBookMemoHandler{
+		Service:   &service.CreateBookMemoService{DB: db, Repo: &rep},
+		Validator: v,
+	}
+	auth.HandleFunc("/create/book/memo", cbm.CreateBookMemo).Methods(http.MethodPost)
+
+	// 本のメモ一覧取得
+	fbm := &handler.FetchBookMemosHandler{
 		Service:   &service.FetchBookMemosService{DB: db, Repo: &rep},
 		Validator: v,
 	}
-	auth.HandleFunc("/books/memos", lbm.ServeHTTP).Methods(http.MethodGet)
+	auth.HandleFunc("/books/memos", fbm.ServeHTTP).Methods(http.MethodGet)
 
 	// 認証ミドルウェア使用
 	// auth.Use(handler.AuthMiddleware(jwter))
