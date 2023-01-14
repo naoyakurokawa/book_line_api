@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/naoyakurokawa/book_line_api/auth"
+	"github.com/naoyakurokawa/book_line_api/config"
+	"github.com/rs/cors"
 )
 
 func AdminMiddleware(next http.Handler) http.Handler {
@@ -34,4 +36,16 @@ func AuthMiddleware(j *auth.JWTer) func(next http.Handler) http.Handler {
 			next.ServeHTTP(w, req)
 		})
 	}
+}
+
+func CorsMiddlewareFunc() func(http.Handler) http.Handler {
+	cfg, _ := config.New()
+	corsWrapper := cors.New(cors.Options{
+		AllowedOrigins:   cfg.Cors,
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
+		AllowedHeaders:   []string{"Origin", "Content-Type", "Accept", "Accept-Language", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	return corsWrapper.Handler
 }

@@ -11,6 +11,11 @@ version: "3.9"
 #     ports:
 #       - "18000:8080"
 services:
+  # app:
+  #   build: .
+  #   container_name: book_line
+  #   ports:
+  #     - "80:80"
   book_line_db:
     image: mysql:8.0.29
     platform: linux/amd64

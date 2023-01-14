@@ -48,7 +48,7 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		},
 		Validator: v,
 	}
-	r.HandleFunc("/login", l.ServeHTTP).Methods(http.MethodPost)
+	r.HandleFunc("/login", l.ServeHTTP).Methods("POST", "OPTIONS")
 
 	// 認証が必要なメソッドを分けるため、Subrouterを実行
 	auth := r.PathPrefix("").Subrouter()
@@ -80,6 +80,7 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 
 	// 認証ミドルウェア使用
 	// auth.Use(handler.AuthMiddleware(jwter))
+	r.Use(handler.CorsMiddlewareFunc())
 
 	return r, cleanup, nil
 }
