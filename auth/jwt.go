@@ -109,6 +109,7 @@ func (j *JWTer) GetToken(ctx context.Context, r *http.Request) (jwt.Token, error
 	return token, nil
 }
 
+// context.WithValue関数で値を設定するときはstruct{}型で定義したDefined Typeを利用する
 type userIDKey struct{}
 type roleKey struct{}
 

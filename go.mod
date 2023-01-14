@@ -37,4 +37,5 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lestrrat-go/jwx/v2 v2.0.8
+	github.com/rs/cors v1.8.3
 )
